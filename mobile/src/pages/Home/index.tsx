@@ -5,14 +5,23 @@ import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native'
 import Select from './Select';
 
-
+interface Dados {
+  uf: string,
+  city: string
+}
 const Home = () => {
   const navigation = useNavigation();
   function handleNavigationToPoints() {
-    const uf = AsyncStorage.getItem('uf');
-    const city = AsyncStorage.getItem('city');
 
-    navigation.navigate('Points', {uf, city});
+    AsyncStorage.getItem('uf').then(uf => {
+      AsyncStorage.getItem('city').then(city => {
+        navigation.navigate('Points', {uf, city});
+      })
+      
+    });
+    
+
+   
   }
   return (
     <ImageBackground source={require('../../assets/home-background.png')}

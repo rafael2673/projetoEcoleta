@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Image, Alert } from 'react-native';
 import { Feather as Icon } from '@expo/vector-icons'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import Constants from 'expo-constants';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import Emoji from 'react-native-emoji';
 import MapView, { Marker } from 'react-native-maps';
 import { SvgUri } from 'react-native-svg';
@@ -21,7 +21,7 @@ interface Point {
   latitude: number;
   longitude: number;
 }
-interface Params{
+interface Params {
   uf: string;
   city: string;
 }
@@ -30,11 +30,10 @@ const Points = () => {
   const [points, setPoints] = useState<Point[]>([]);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [initialPosition, setInicialPosition] = useState<[number, number]>([0, 0]);
-
   const navigation = useNavigation();
   const route = useRoute();
-  console.log(route.params);
- // const routeParams = route.params as Params;
+
+  const routeParams = route.params as Params;
   useEffect(() => {
     api.get('items').then(response => {
       setItems(response.data);
@@ -63,17 +62,19 @@ const Points = () => {
     loadPosition();
   }, []);
 
-  // useEffect(() => {
-  //   api.get('points', {params: {
-  //     city: routeParams.city,
-  //     uf: routeParams.uf,
-  //     items: selectedItems
-  //   }}).then(response => {
-  //     setPoints(response.data);
-  //   });
-  // }, []);
+  useEffect(() => {
+    api.get('points', {
+      params: {
+        city: routeParams.city,
+        uf: routeParams.uf,
+        items: selectedItems
+      }
+    }).then(response => {
+        setPoints(response.data);
+    });
+  }, [selectedItems]);
 
-  
+
   function handleSelectItem(id: number) {
     const alreadySelected = selectedItems.findIndex(item => item === id);
 
@@ -87,7 +88,7 @@ const Points = () => {
   function handleNavigateBack() {
     navigation.goBack();
   }
-  function handleNavigateToDetail(id:number) {
+  function handleNavigateToDetail(id: number) {
     navigation.navigate('Detail', { point_id: id });
   }
   return (
