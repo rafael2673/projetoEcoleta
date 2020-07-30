@@ -1,6 +1,8 @@
 # dependencies
-/node_modules
-/uploads
+node_modules
+uploads/marker.jpg
+!uploads/.gitkeep
+
 /.pnp
 .pnp.js
 
