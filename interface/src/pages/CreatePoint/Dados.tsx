@@ -30,7 +30,7 @@ const Dados = () => {
             </div>
             <div className="field">
                 <label htmlFor="whatsapp">Whatsapp</label>
-                <input type="text" name="whatsapp" id="whatsapp" value = '+55' onChange = {handleInputChange}/>
+                <input type="text" name="whatsapp" id="whatsapp" onChange = {handleInputChange}/>
             </div>
       </fieldset>
   )
